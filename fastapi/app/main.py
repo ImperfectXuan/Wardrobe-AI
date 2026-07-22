@@ -1,14 +1,11 @@
-# fastapi/app/main.py
 from fastapi import FastAPI
+from app.api.routes import router
 
 app = FastAPI(title="Wardrobe AI Service", version="1.0.0")
+
+app.include_router(router)
 
 
 @app.get("/health")
 async def health():
     return {"status": "ok"}
-
-
-@app.get("/")
-async def root():
-    return {"service": "Wardrobe AI Service", "version": "1.0.0"}
