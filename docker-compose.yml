@@ -1,0 +1,179 @@
+# docker-compose.yml
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: wardrobe
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./supabase/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  supabase-auth:
+    image: supabase/gotrue:v2.164.0
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/wardrobe?sslmode=disable
+      GOTRUE_JWT_SECRET: ${JWT_SECRET}
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_SITE_URL: http://localhost:3000
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+      GOTRUE_SMS_AUTOCONFIRM: "true"
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "false"
+      GOTRUE_EXTERNAL_PHONE_ENABLED: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "9999:9999"
+
+  supabase-storage:
+    image: supabase/storage-api:v1.14.0
+    environment:
+      ANON_KEY: ${ANON_KEY}
+      SERVICE_KEY: ${SERVICE_ROLE_KEY}
+      POSTGREST_URL: http://supabase-rest:3000
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/wardrobe?sslmode=disable
+      FILE_SIZE_LIMIT: 10485760
+      STORAGE_BACKEND: s3
+      GLOBAL_S3_BUCKET: ${MINIO_BUCKET}
+      GLOBAL_S3_ENDPOINT: http://minio:9000
+      GLOBAL_S3_PROTOCOL: http
+      GLOBAL_S3_FORCE_PATH_STYLE: "true"
+      AWS_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
+      AWS_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
+      REGION: us-east-1
+    depends_on:
+      db:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+
+  supabase-rest:
+    image: postgrest/postgrest:v12.2.3
+    environment:
+      PGRST_DB_URI: postgres://postgres:${POSTGRES_PASSWORD}@db:5432/wardrobe?sslmode=disable
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: ${JWT_SECRET}
+      PGRST_DB_USE_LEGACY_GUCS: "false"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3001:3000"
+
+  supabase-kong:
+    image: kong:3.7
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /var/lib/kong/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_PLUGINS: bundled,oidc
+    volumes:
+      - ./kong.yml:/var/lib/kong/kong.yml
+    depends_on:
+      - supabase-auth
+      - supabase-rest
+      - supabase-storage
+    ports:
+      - "8000:8000"
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: |
+      /bin/sh -c "
+      mc alias set local http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      mc mb local/${MINIO_BUCKET} --ignore-existing;
+      mc anonymous set download local/${MINIO_BUCKET};
+      "
+
+  fastapi:
+    build: ./fastapi
+    environment:
+      MODEL: ${MODEL}
+      BAILIAN_API_KEY: ${BAILIAN_API_KEY}
+      BAILIAN_MODEL: ${BAILIAN_MODEL}
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      - ollama
+    volumes:
+      - ./fastapi/app:/app
+    ports:
+      - "8001:8001"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  nextjs:
+    build:
+      context: ./nextjs
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      NEXT_PUBLIC_MINIO_ENDPOINT: ${NEXT_PUBLIC_MINIO_ENDPOINT}
+      NEXT_PUBLIC_MINIO_PORT: ${NEXT_PUBLIC_MINIO_PORT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET: ${MINIO_BUCKET}
+      FASTAPI_URL: ${FASTAPI_URL}
+    volumes:
+      - ./nextjs:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    depends_on:
+      - supabase-kong
+      - minio
+      - fastapi
+
+volumes:
+  db_data:
+  minio_data:
+  ollama_data:

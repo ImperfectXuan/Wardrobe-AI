@@ -97,7 +97,7 @@ wardrobe-ai/
 
 ---
 
-### 任务 1：Docker Compose 基础编排 + 项目结构
+### Task 1: Docker Compose 基础编排 + 项目结构
 
 **创建文件：**
 - `docker-compose.yml`
@@ -575,7 +575,7 @@ git commit -m "chore: 初始化 Docker Compose 全栈编排，含 Supabase、Fas
 
 ---
 
-### 任务 2：FastAPI AI 服务 — 策略模式 + 识别接口
+### Task 2: FastAPI AI 服务 — 策略模式 + 识别接口
 
 **创建文件：**
 - `fastapi/app/schemas/clothing.py`
@@ -847,7 +847,7 @@ git commit -m "feat: 实现 FastAPI AI 识别服务，支持 Ollama 与阿里百
 
 ---
 
-### 任务 3：Next.js 脚手架 + TypeScript 类型 + shadcn/ui 初始化
+### Task 3: Next.js 脚手架 + TypeScript 类型 + shadcn/ui 初始化
 
 **创建文件：**
 - `nextjs/package.json`
@@ -1162,7 +1162,7 @@ git commit -m "chore: 初始化 Next.js 项目，配置 shadcn/ui、TailwindCSS 
 
 ---
 
-### 任务 4：Supabase 客户端 + 认证中间件
+### Task 4: Supabase 客户端 + 认证中间件
 
 **创建文件：**
 - `nextjs/lib/supabase/client.ts`
@@ -1312,7 +1312,7 @@ git commit -m "feat: 实现 Supabase 客户端和全局认证中间件"
 
 ---
 
-### 任务 5：认证页面（登录 + 注册 + 回调）
+### Task 5: 认证页面（登录 + 注册 + 回调）
 
 **创建文件：**
 - `nextjs/app/auth/login/page.tsx`
@@ -1564,7 +1564,7 @@ git commit -m "feat: 实现注册、登录和认证回调页面"
 
 ---
 
-### 任务 6：MinIO 客户端 + 图片上传 API
+### Task 6: MinIO 客户端 + 图片上传 API
 
 **创建文件：**
 - `nextjs/lib/minio.ts`
@@ -1652,7 +1652,7 @@ git commit -m "feat: 实现 MinIO 图片上传客户端"
 
 ---
 
-### 任务 7：API Routes — 衣物 CRUD
+### Task 7: API Routes — 衣物 CRUD
 
 **创建文件：**
 - `nextjs/app/api/clothing/route.ts`
@@ -1945,7 +1945,7 @@ git commit -m "feat: 实现衣物 CRUD API 端点（列表、创建、详情、�
 
 ---
 
-### 任务 8：API Routes — 标签 + 统计 + AI 识别桥接
+### Task 8: API Routes — 标签 + 统计 + AI 识别桥接
 
 **创建文件：**
 - `nextjs/app/api/tags/route.ts`
@@ -2177,7 +2177,7 @@ git commit -m "feat: 实现标签 API、统计 API 和 AI 识别桥接端点"
 
 ---
 
-### 任务 9：布局组件（导航栏 + 侧边栏）
+### Task 9: 布局组件（导航栏 + 侧边栏）
 
 **创建文件：**
 - `nextjs/components/layout/Navbar.tsx`
@@ -2388,7 +2388,7 @@ git commit -m "feat: 实现导航栏、侧边栏和认证布局框架"
 
 ---
 
-### 任务 10：衣柜组件（卡片、网格、搜索栏、表单、上传区、AI 面板）
+### Task 10: 衣柜组件（卡片、网格、搜索栏、表单、上传区、AI 面板）
 
 **创建文件：**
 - `nextjs/components/wardrobe/ClothingCard.tsx`
@@ -3021,7 +3021,7 @@ git commit -m "feat: 实现衣柜卡片、网格、搜索栏、上传区、AI �
 
 ---
 
-### 任务 11：页面 — 仪表盘首页
+### Task 11: 页面 — 仪表盘首页
 
 **创建文件：**
 - `nextjs/components/dashboard/StatCard.tsx`
@@ -3295,7 +3295,7 @@ git commit -m "feat: 实现仪表盘首页，含统计卡片、分类饼图和�
 
 ---
 
-### 任务 12：页面 — 衣柜列表 + 新增 + 详情 + 编辑
+### Task 12: 页面 — 衣柜列表 + 新增 + 详情 + 编辑
 
 **创建文件：**
 - `nextjs/app/(authenticated)/wardrobe/page.tsx`
@@ -3689,7 +3689,7 @@ git commit -m "feat: 实现衣柜列表、新增、详情和编辑页面"
 
 ---
 
-### 任务 13：设置页面
+### Task 13: 设置页面
 
 **创建文件：**
 - `nextjs/app/(authenticated)/settings/page.tsx`
@@ -3857,7 +3857,7 @@ git commit -m "feat: 实现设置页面、用户资料 API"
 
 ---
 
-### 任务 14：集成验证与收尾
+### Task 14: 集成验证与收尾
 
 **生成产物：** 端到端验证完整流程、bug 修复、README
 
