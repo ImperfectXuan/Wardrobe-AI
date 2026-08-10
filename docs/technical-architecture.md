@@ -75,7 +75,7 @@ Backend For Frontend：前端网站自己带一层「小后端」。好处是浏
 2. **本地自托管**：开发阶段少依赖外网账号与账单。  
 3. **和「线上对象存储 / JWT」习惯一致**，以后若上云，心智模型可复用。
 
-**注意：** 仓库里的 `.env` / `.env.example` 里的 `ANON_KEY`、`JWT_SECRET` 等若仍是占位符，登录会失败。真实联调前必须换成与本地 Auth 匹配的密钥（见测试指导文档）。
+**注意：** 仓库里的 `.env` / `.env.example` 里的 `ANON_KEY`、`JWT_SECRET` 等若仍是占位符，登录会失败。真实联调前必须换成与本地 Auth 匹配的密钥，完整步骤见 `docs/local-setup-guide.md`。
 
 ### 2.3 图片：MinIO（而不是直接塞进数据库）
 
@@ -194,4 +194,5 @@ Wardrobe AI/
 - 产品范围：根目录 `PRD-v1.0.md`  
 - 设计细节：`docs/superpowers/specs/2026-07-22-wardrobe-ai-mvp-design.md`  
 - 分阶段任务：`docs/phased-implementation-roadmap.md`  
-- **如何测试：** `docs/testing-guide.md`（下一份必读）
+- **本地配置与联调（必读）：** `docs/local-setup-guide.md`  
+- **如何测试：** `docs/testing-guide.md`

@@ -2,7 +2,8 @@
 
 > 面向：未系统做过软件测试的同学  
 > 目标：告诉你「除了开发自己随手点一下之外，你该怎么正式做验收」  
-> 原则：每个阶段有**可勾选清单**；先会「看结果」，再学「用工具」
+> 原则：每个阶段有**可勾选清单**；先会「看结果」，再学「用工具」  
+> **联调前必读：** `docs/local-setup-guide.md`（密钥生成、Docker、FastAPI）
 
 ---
 
@@ -65,7 +66,8 @@ git branch
 - `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` / `MINIO_BUCKET`  
 
 **若密钥仍是 `your-anon-key` 这种占位符：**  
-阶段一的「真实注册登录」会失败；但「未登录被踢回登录页」仍可能测得通。联调登录前必须换成与本地 Auth 一致的真实 JWT 配置（需开发协助生成）。
+阶段一的「真实注册登录」会失败；但「未登录被踢回登录页」仍可能测得通。  
+联调登录前请按 **`docs/local-setup-guide.md`** 用脚本生成并写入与 `JWT_SECRET` 匹配的 `ANON_KEY` / `SERVICE_ROLE_KEY`，再同步到 `nextjs/.env.local`。
 
 ### 1.4 启动基础设施（Docker）
 
@@ -494,8 +496,8 @@ curl -sI http://localhost:3000/ | head -10
 
 按当前仓库进度，建议今天就做：
 
-1. 按第 1 章把 Docker + `npm run dev` 跑起来。  
-2. 用无痕窗口完整跑完 **阶段 I 勾选表**（登录相关若密钥未就绪，先测重定向三条）。  
+1. 先按 **`docs/local-setup-guide.md`** 配好密钥并启动 Docker + Next。  
+2. 用无痕窗口完整跑完 **阶段 I 勾选表**。  
 3. 确认 MinIO 起来后，让开发给你一个上传 URL，你做 **阶段 II-02 / II-03**。  
 4. 把结果记进表格；失败项写成 bug。  
 
@@ -505,6 +507,7 @@ curl -sI http://localhost:3000/ | head -10
 
 ## 8. 相关文档
 
+- 本地配置与联调：`docs/local-setup-guide.md`（密钥生成、Docker、FastAPI）  
 - 架构说明：`docs/technical-architecture.md`  
 - 阶段目标原文：`docs/phased-implementation-roadmap.md`  
 - 产品范围：`PRD-v1.0.md`
