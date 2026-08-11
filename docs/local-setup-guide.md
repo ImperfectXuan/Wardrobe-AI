@@ -209,7 +209,7 @@ docker compose up -d --force-recreate supabase-auth supabase-rest supabase-kong 
 ### 3.4 数据库迁移说明
 
 - `supabase/migrations/*.sql` 在 **Postgres 首次初始化数据卷** 时会自动执行。  
-- 若你很早就起过 `db`，数据卷已存在，**新加的 SQL（如 `002_*.sql`）不会自动再跑**。
+- 若你很早就起过 `db`，数据卷已存在，**新加的 SQL（如 `002_*.sql`、`003_*.sql`）不会自动再跑**。
 
 检查是否已有业务表：
 
@@ -221,6 +221,7 @@ docker compose exec db psql -U postgres -d wardrobe -c '\dt public.*'
 
 ```bash
 docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/002_rls_clothing_tags_delete.sql
+docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/003_profiles_insert.sql
 ```
 
 想「彻底重来」（会清空数据库数据）：

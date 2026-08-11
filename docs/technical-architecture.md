@@ -165,7 +165,24 @@ Wardrobe AI/
 
 ---
 
-## 5. 常见端口一览（本地）
+## 5. 前端页面与 API 对应（阶段 V）
+
+受保护页面在 `nextjs/app/(authenticated)/`，未登录访问 `/`、`/wardrobe`、`/settings` 会跳转登录。
+
+| 页面 | 路由 | 主要 API |
+|---|---|---|
+| 仪表盘 | `/` | `GET /api/stats/summary` |
+| 衣柜列表 | `/wardrobe` | `GET /api/clothing`、`GET /api/tags` |
+| 新增衣物 | `/wardrobe/add` | `POST /api/clothing/ai/recognize`、`POST /api/clothing` |
+| 衣物详情 | `/wardrobe/[id]` | `GET` / `DELETE /api/clothing/[id]` |
+| 编辑衣物 | `/wardrobe/[id]/edit` | `GET` / `PATCH /api/clothing/[id]` |
+| 设置 | `/settings` | `GET /api/auth/me`、`PATCH /api/auth/profile` |
+
+设置页当前支持昵称与头像，不含改密。
+
+---
+
+## 6. 常见端口一览（本地）
 
 | 端口 | 服务 | 你何时用到 |
 |---|---|---|
@@ -179,7 +196,7 @@ Wardrobe AI/
 
 ---
 
-## 6. 架构决策小结（背这几句就够）
+## 7. 架构决策小结（背这几句就够）
 
 1. **一个网站入口（Next.js）**：降低全栈协作成本。  
 2. **认证与结构化数据交给 Postgres + Auth**：安全与查询可靠。  
@@ -189,7 +206,7 @@ Wardrobe AI/
 
 ---
 
-## 7. 相关文档
+## 8. 相关文档
 
 - 产品范围：根目录 `PRD-v1.0.md`  
 - 设计细节：`docs/superpowers/specs/2026-07-22-wardrobe-ai-mvp-design.md`  

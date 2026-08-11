@@ -1,8 +1,9 @@
 # Wardrobe AI MVP — 分阶段实现路线图（Task 4–14）
 
-> **状态：** Task 1–3 已完成（Docker Compose 编排、FastAPI AI 服务、Next.js 脚手架）
+> **状态：** 阶段 I–V 已完成（认证、MinIO、API、组件库、页面集成）；下一阶段为阶段 VI 集成验证  
 > 
-> **开始时间：** 2026-07-22
+> **开始时间：** 2026-07-22  
+> **阶段 V 落地说明：** 页面位于 `nextjs/app/(authenticated)/`；设置页范围 = 昵称 + 头像（不含改密）
 > 
 > 本文档将 Task 4–14 拆分为 6 个可独立交付的阶段。每个阶段有明确的输入、输出、涉及文件和提交范围。
 
@@ -28,12 +29,12 @@
 **前置条件：** Task 3（Next.js 脚手架）已完成
 
 **验收标准：**
-- [ ] 访问 `/wardrobe` → 302 重定向到 `/auth/login`
-- [ ] 访问 `/settings` → 302 重定向到 `/auth/login`
-- [ ] 访问 `/`（首页）→ 200 OK（无需登录）
-- [ ] 输入邮箱密码注册 → 自动登录并跳转首页
-- [ ] 输入邮箱密码登录 → 跳转首页
-- [ ] 登录后可正常访问 `/wardrobe`
+- [x] 访问 `/wardrobe` → 302 重定向到 `/auth/login`
+- [x] 访问 `/settings` → 302 重定向到 `/auth/login`
+- [x] 访问 `/`（仪表盘）→ 未登录重定向到 `/auth/login`（阶段 V 起首页即为需登录的仪表盘）
+- [x] 输入邮箱密码注册 → 自动登录并跳转首页
+- [x] 输入邮箱密码登录 → 跳转首页
+- [x] 登录后可正常访问 `/wardrobe`
 
 ### Task 4：Supabase 客户端 + 认证中间件
 
@@ -165,19 +166,19 @@
 **前置条件：** 阶段 IV（组件库）+ 阶段 III（API 层）+ 阶段 I（认证体系）
 
 **验收标准：**
-- [ ] 仪表盘：统计卡片数据来自 API，分类饼图正确，最近新增列表正确
-- [ ] 衣柜列表：搜索 + 筛选实时生效，卡片网格展示，空状态提示
-- [ ] 新增衣物：上传图片 → AI 识别（或跳过）→ 表单填写 → 保存 → 跳转详情
-- [ ] 衣物详情：大图 + 所有属性 + 标签 + 编辑/删除按钮
-- [ ] 编辑衣物：预填已有数据，修改保存
-- [ ] 设置页：编辑昵称 + 头像
-- [ ] 侧边栏导航 + Navbar 在所有页面正常运作
+- [x] 仪表盘：统计卡片数据来自 API，分类饼图正确，最近新增列表正确
+- [x] 衣柜列表：搜索 + 筛选实时生效，卡片网格展示，空状态提示
+- [x] 新增衣物：上传图片 → AI 识别（或跳过）→ 表单填写 → 保存 → 跳转详情
+- [x] 衣物详情：大图 + 所有属性 + 标签 + 编辑/删除按钮
+- [x] 编辑衣物：预填已有数据，修改保存
+- [x] 设置页：编辑昵称 + 头像（不含改密）
+- [x] 侧边栏导航 + Navbar 在所有页面正常运作
 
 ### Task 11：页面 — 仪表盘首页
 
 | 维度 | 内容 |
 |---|---|
-| 文件 | `nextjs/app/page.tsx`（修改）+ `nextjs/app/layout.tsx`（添加 Navbar + Sidebar） |
+| 文件 | `nextjs/app/(authenticated)/page.tsx`（布局已在阶段 IV 的 `(authenticated)/layout.tsx`） |
 | 消费接口 | `GET /api/stats/summary` + `createClient()` 获取用户信息 |
 | 关键交互 | 加载态 → 数据渲染 StatCard × 3 + CategoryPieChart + RecentItems；错误态 → 错误提示 |
 | 提交 | `feat: 实现仪表盘首页，展示统计数据` |
@@ -186,7 +187,7 @@
 
 | 维度 | 内容 |
 |---|---|
-| 新建/修改文件 | `nextjs/app/wardrobe/page.tsx`、`nextjs/app/wardrobe/add/page.tsx`、`nextjs/app/wardrobe/[id]/page.tsx`、`nextjs/app/wardrobe/[id]/edit/page.tsx` |
+| 新建/修改文件 | `nextjs/app/(authenticated)/wardrobe/page.tsx`、`.../add/page.tsx`、`.../[id]/page.tsx`、`.../[id]/edit/page.tsx` |
 | 消费接口 | `GET/POST /api/clothing`、`GET/PATCH/DELETE /api/clothing/[id]`、`POST /api/clothing/ai/recognize`、`GET /api/tags` |
 | 关键交互 | 列表：搜索 + 筛选栏 → 衣物网格 → 点击进详情；新增：UploadZone → AIRecognitionPanel → ClothingForm → 保存；详情：大图 + 属性展示 + 编辑/删除；编辑：预填表单 + 提交更新 |
 | 提交 | `feat: 实现衣柜列表、新增、详情和编辑页面` |
@@ -195,9 +196,9 @@
 
 | 维度 | 内容 |
 |---|---|
-| 文件 | `nextjs/app/settings/page.tsx` |
-| 消费接口 | `GET /api/auth/me`、`PATCH /api/auth/profile`、`createClient()` |
-| 关键交互 | 展示当前用户信息 → 编辑昵称 → 保存；上传头像 → 保存 |
+| 文件 | `nextjs/app/(authenticated)/settings/page.tsx`、`nextjs/app/api/auth/me/route.ts`、`nextjs/app/api/auth/profile/route.ts` |
+| 消费接口 | `GET /api/auth/me`、`PATCH /api/auth/profile` |
+| 关键交互 | 展示当前用户信息 → 编辑昵称 → 保存；上传头像 → 保存（本阶段不含改密） |
 | 提交 | `feat: 实现用户设置页面` |
 
 ---

@@ -33,12 +33,14 @@ interface ClothingFormProps {
   defaultValues?: Partial<ClothingFormValues>;
   onSubmit: (values: ClothingFormValues) => void;
   submitLabel?: string;
+  disabled?: boolean;
 }
 
 export function ClothingForm({
   defaultValues,
   onSubmit,
   submitLabel = "保存",
+  disabled = false,
 }: ClothingFormProps) {
   const {
     register,
@@ -165,7 +167,9 @@ export function ClothingForm({
         <Textarea id="notes" rows={3} {...register("notes")} />
       </div>
 
-      <Button type="submit">{submitLabel}</Button>
+      <Button type="submit" disabled={disabled}>
+        {submitLabel}
+      </Button>
     </form>
   );
 }

@@ -8,6 +8,8 @@
 
 **技术栈：** Next.js 15 + TypeScript + shadcn/ui + TailwindCSS、Supabase 自托管 (Docker)、Python FastAPI + Ollama + 阿里百炼、MinIO、Docker Compose
 
+> **阶段 V 落地说明（2026-08）：** 页面集成已按 `nextjs/app/(authenticated)/` 路径落地（仪表盘 `/`、衣柜、设置）；设置页为昵称 + 头像，不含改密。
+
 ## 全局约束
 
 - 所有 API 路由通过 Supabase Auth JWT 保护

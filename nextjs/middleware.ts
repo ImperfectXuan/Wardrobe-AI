@@ -29,10 +29,12 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const protectedPaths = ["/wardrobe", "/settings"];
-  const isProtected = protectedPaths.some((p) =>
-    request.nextUrl.pathname.startsWith(p)
-  );
+  // `/` 精确匹配：仪表盘需登录；不可用 startsWith("/") 否则会匹配全部路径
+  const pathname = request.nextUrl.pathname;
+  const isProtected =
+    pathname === "/" ||
+    pathname.startsWith("/wardrobe") ||
+    pathname.startsWith("/settings");
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone();
