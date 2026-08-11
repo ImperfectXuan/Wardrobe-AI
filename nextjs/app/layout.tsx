@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import "@fontsource/dm-sans/400.css";
+import "@fontsource/dm-sans/500.css";
+import "@fontsource/dm-sans/600.css";
+import "@fontsource/dm-sans/700.css";
+import "@fontsource/space-mono/400.css";
+import "@fontsource/space-mono/700.css";
 import "./globals.css";
-import { Geist } from "next/font/google";
-import { cn } from "@/lib/utils";
-
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Wardrobe AI - AI 数字衣橱",
@@ -17,8 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN" className={cn("font-sans", geist.variable)}>
-      <body className="min-h-screen bg-background antialiased">
+    <html lang="zh-CN">
+      <body className="min-h-screen bg-background font-sans antialiased">
         {children}
         <Toaster richColors position="top-center" />
       </body>

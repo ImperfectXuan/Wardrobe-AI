@@ -6,7 +6,13 @@ interface CategoryPieChartProps {
   data: { category: string; count: number }[];
 }
 
-const COLORS = ["#2563eb", "#16a34a", "#ca8a04", "#dc2626", "#7c3aed"];
+const COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+];
 
 export function CategoryPieChart({ data }: CategoryPieChartProps) {
   if (!data.length) {

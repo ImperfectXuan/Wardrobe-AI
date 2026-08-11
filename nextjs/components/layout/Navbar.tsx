@@ -30,10 +30,13 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
       <div className="flex h-14 items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold text-lg">
-          <span className="text-primary">Wardrobe AI</span>
+        <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
+          <span className="rounded-lg bg-primary px-2 py-0.5 text-sm text-primary-foreground">
+            WA
+          </span>
+          <span>Wardrobe AI</span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-4">

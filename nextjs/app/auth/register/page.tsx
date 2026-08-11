@@ -49,8 +49,8 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/50">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <Card className="w-full max-w-md border-border shadow-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">注册 Wardrobe AI</CardTitle>
           <CardDescription>开始管理你的数字衣橱</CardDescription>

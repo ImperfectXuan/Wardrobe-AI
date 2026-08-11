@@ -13,7 +13,7 @@ interface ClothingCardProps {
 
 export function ClothingCard({ item }: ClothingCardProps) {
   return (
-    <Card className="group overflow-hidden transition-shadow hover:shadow-md">
+    <Card className="group overflow-hidden border-border transition-shadow hover:shadow-md">
       <Link href={`/wardrobe/${item.id}`}>
         <div className="relative aspect-square bg-muted">
           <Image

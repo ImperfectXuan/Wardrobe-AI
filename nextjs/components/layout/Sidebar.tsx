@@ -16,7 +16,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex flex-col w-56 border-r bg-background pt-4 shrink-0">
+    <aside className="hidden w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar pt-4 lg:flex">
       <nav className="flex flex-col gap-1 px-3">
         {navItems.map(({ href, label, icon: Icon }) => {
           const isActive =
@@ -27,10 +27,10 @@ export function Sidebar() {
               href={href}
               className={cn(
                 buttonVariants({
-                  variant: isActive ? "secondary" : "ghost",
+                  variant: isActive ? "default" : "ghost",
                 }),
                 "justify-start gap-2",
-                isActive && "font-medium"
+                isActive && "font-semibold shadow-none"
               )}
             >
               <Icon className="h-4 w-4" />

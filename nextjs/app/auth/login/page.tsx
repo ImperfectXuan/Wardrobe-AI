@@ -45,8 +45,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/50">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <Card className="w-full max-w-md border-border shadow-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">登录 Wardrobe AI</CardTitle>
           <CardDescription>欢迎回到你的数字衣橱</CardDescription>
