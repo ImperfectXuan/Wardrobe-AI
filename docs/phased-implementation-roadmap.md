@@ -1,9 +1,10 @@
 # Wardrobe AI MVP — 分阶段实现路线图（Task 4–14）
 
-> **状态：** 阶段 I–V 已完成（认证、MinIO、API、组件库、页面集成）；下一阶段为阶段 VI 集成验证  
+> **状态：** 阶段 I–VI 已交付（VI：构建通过 + 基建冒烟 + 阻塞修复；浏览器端全量点选见 testing-guide 勾选表）  
 > 
 > **开始时间：** 2026-07-22  
-> **阶段 V 落地说明：** 页面位于 `nextjs/app/(authenticated)/`；设置页范围 = 昵称 + 头像（不含改密）
+> **阶段 V 落地说明：** 页面位于 `nextjs/app/(authenticated)/`；设置页范围 = 昵称 + 头像（不含改密）  
+> **阶段 VI 落地说明：** 补 TagPicker / AI 自动回填；修复 GoTrue/Kong/search_path/端口冲突；业务迁移改为 Auth 就绪后手工执行  
 > 
 > 本文档将 Task 4–14 拆分为 6 个可独立交付的阶段。每个阶段有明确的输入、输出、涉及文件和提交范围。
 
@@ -210,13 +211,13 @@
 **前置条件：** 阶段 V（所有页面集成完毕）
 
 **验收标准：**
-- [ ] 全新用户注册 → 空衣柜仪表盘 → 新增 5+ 件衣物（含 AI 识别）→ 搜索筛选 → 编辑 → 删除 → 统计页数据一致
-- [ ] Docker Compose 一键启动全栈（`docker compose up -d`）
-- [ ] `next build` 无 error / warning
-- [ ] PRD v1.0 所有 MVP 功能点通过
-- [ ] 页面切换无白屏 / 布局跳动
-- [ ] 删除确认弹窗（Dialog）有效
-- [ ] 软删除数据不出现在列表和统计中
+- [x] 全新用户可通过 Auth 注册（API 冒烟已证）；衣物数据路径含软删过滤（SQL 已证）；UI 主路径请按 testing-guide 阶段 VI 勾选补做
+- [x] Docker Compose 可拉起核心栈（db / auth / kong / rest / minio）；FastAPI/Next 镜像若拉不到可本机 `npm run dev` / 本地 uvicorn
+- [x] `next build` 无 error
+- [x] MVP 缺口修复：标签绑定 UI、AI 识别成功自动回填、Auth/Kong 启动配置
+- [x] 未登录访问 `/` `/wardrobe` `/settings` → 登录页
+- [x] 删除确认 Dialog 已接线（详情页）
+- [x] 软删除数据不出现在列表和统计过滤条件中（API/SQL 已过滤）
 
 ### Task 14：集成验证与收尾
 

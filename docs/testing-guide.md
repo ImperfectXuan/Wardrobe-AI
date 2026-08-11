@@ -433,7 +433,7 @@ curl -s "http://localhost:3000/api/clothing?page=1" \
 #### 必做
 
 1. **全新账号**从零走通主路径（不要用开发者长期脏数据账号）。  
-2. 至少录入 **5 件**衣物（含至少 1 次 AI 识别，若已接通）。  
+2. 至少录入 **5 件**衣物（含至少 1 次 AI 识别，若 FastAPI 已接通）。  
 3. 删除后确认列表与统计都少了对应项。  
 4. 请开发执行：
 
@@ -443,11 +443,24 @@ cd nextjs && npm run build
 
 期望无 error。  
 
-5. `docker compose up -d` 后按 README/本文重新走一遍「冷启动 → 能用」。  
+5. 按 `docs/local-setup-guide.md` §3.4 起栈并执行业务 migrations。  
 
-#### 阶段 VI 勾选表
+#### 阶段 VI 勾选表（2026-08 代理验证记录）
 
-直接使用路线图阶段 VI 验收标准全文勾选。
+- [x] `npm run build` exit 0（feat/phase-6-verify）
+- [x] 未登录 `/` `/wardrobe` `/settings` → `/auth/login`
+- [x] `GET /api/clothing` 未登录 → `{"success":false,"error":"未登录"}`
+- [x] Kong + GoTrue：`POST /auth/v1/signup` 可注册并返回 access_token
+- [x] MinIO health live
+- [x] 业务表 + `003` INSERT policy 已应用
+- [x] 软删除：`is_deleted=true` 后 active 计数减少（SQL 验证）
+- [x] 代码缺口：AI 成功自动回填；新增/编辑 TagPicker 提交 `tag_ids`
+- [ ] 浏览器：登录后仪表盘 / 新增 5 件（含 AI）/ 搜索 / 编辑 / Dialog 删除 / 设置头像（需本机登录会话）
+- [ ] FastAPI `:8001/health`（镜像构建若受 Docker Hub 网络影响，可本机起 uvicorn）
+
+#### 阶段 VI 勾选表（路线图对照）
+
+直接使用路线图阶段 VI 验收标准；浏览器项以本表上一节为准补勾。
 
 ---
 
@@ -508,14 +521,12 @@ curl -sI http://localhost:3000/ | head -10
 
 ## 7. 你现在立刻可以开始的「今日任务」
 
-按当前仓库进度，建议今天就做：
+阶段 VI 代码与基建冒烟已完成。建议今天补浏览器勾选：
 
-1. 先按 **`docs/local-setup-guide.md`** 配好密钥并启动 Docker + Next。  
-2. 用无痕窗口完整跑完 **阶段 I 勾选表**。  
-3. 确认 MinIO 起来后，让开发给你一个上传 URL，你做 **阶段 II-02 / II-03**。  
-4. 把结果记进表格；失败项写成 bug。  
-
-完成以上，你就已经在用「正规阶段验收」方式工作了，而不是只依赖开发自测。
+1. 按 **`docs/local-setup-guide.md` §3.4** 确认 Auth 就绪与 migrations 已执行。  
+2. 无痕窗口注册新用户，跑完 **阶段 V 勾选表** + **阶段 VI 浏览器项**（5 件衣物、AI、删除 Dialog、设置头像）。  
+3. 若 FastAPI 未起：本机或修好镜像后再测 AI；可先「跳过识别」走完录入。  
+4. 失败项按第 4 章格式写 bug。  
 
 ---
 

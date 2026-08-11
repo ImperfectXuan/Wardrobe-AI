@@ -12,6 +12,7 @@ import {
   ClothingForm,
   type ClothingFormValues,
 } from "@/components/wardrobe/ClothingForm";
+import { TagPicker } from "@/components/wardrobe/TagPicker";
 import { ApiRequestError, fetchJson } from "@/lib/fetch-json";
 import {
   CLOTHING_CATEGORIES,
@@ -53,6 +54,7 @@ export default function AddClothingPage() {
   const [formKey, setFormKey] = useState(0);
   const [saving, setSaving] = useState(false);
   const [skippedAi, setSkippedAi] = useState(false);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   function applyRecognition(result: RecognizeResult) {
     setFormDefaults(toFormDefaults(result));
@@ -75,7 +77,7 @@ export default function AddClothingPage() {
       formData.append("season", values.season);
       formData.append("style", values.style);
       formData.append("notes", values.notes);
-      formData.append("tag_ids", "[]");
+      formData.append("tag_ids", JSON.stringify(selectedTagIds));
       if (file) {
         formData.append("image", file);
       }
@@ -112,10 +114,12 @@ export default function AddClothingPage() {
         </div>
       </div>
 
-      <UploadZone onImageSelected={(next) => {
-        setFile(next);
-        setSkippedAi(false);
-      }} />
+      <UploadZone
+        onImageSelected={(next) => {
+          setFile(next);
+          setSkippedAi(false);
+        }}
+      />
 
       {file && !skippedAi && (
         <AIRecognitionPanel
@@ -124,6 +128,11 @@ export default function AddClothingPage() {
           onSkip={() => setSkippedAi(true)}
         />
       )}
+
+      <TagPicker
+        selectedIds={selectedTagIds}
+        onChange={setSelectedTagIds}
+      />
 
       <ClothingForm
         key={formKey}

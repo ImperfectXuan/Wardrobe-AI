@@ -120,6 +120,8 @@ export function AIRecognitionPanel({
 
         if (!cancelled) {
           setStep("editing");
+          // 识别成功后自动填入表单，仍可继续编辑后再点「使用识别结果」
+          onResult(result);
         }
       } catch (error) {
         if (cancelled) return;

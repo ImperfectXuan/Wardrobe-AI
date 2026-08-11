@@ -173,9 +173,9 @@ Wardrobe AI/
 |---|---|---|
 | 仪表盘 | `/` | `GET /api/stats/summary` |
 | 衣柜列表 | `/wardrobe` | `GET /api/clothing`、`GET /api/tags` |
-| 新增衣物 | `/wardrobe/add` | `POST /api/clothing/ai/recognize`、`POST /api/clothing` |
+| 新增衣物 | `/wardrobe/add` | `POST /api/clothing/ai/recognize`、`POST /api/clothing`；标签经 `GET/POST /api/tags` + `tag_ids` |
 | 衣物详情 | `/wardrobe/[id]` | `GET` / `DELETE /api/clothing/[id]` |
-| 编辑衣物 | `/wardrobe/[id]/edit` | `GET` / `PATCH /api/clothing/[id]` |
+| 编辑衣物 | `/wardrobe/[id]/edit` | `GET` / `PATCH /api/clothing/[id]`（可改标签） |
 | 设置 | `/settings` | `GET /api/auth/me`、`PATCH /api/auth/profile` |
 
 设置页当前支持昵称与头像，不含改密。

@@ -11,6 +11,7 @@ import {
   ClothingForm,
   type ClothingFormValues,
 } from "@/components/wardrobe/ClothingForm";
+import { TagPicker } from "@/components/wardrobe/TagPicker";
 import { ApiRequestError, fetchJson } from "@/lib/fetch-json";
 import type { ClothingCategory, ClothingItem } from "@/lib/types";
 
@@ -32,6 +33,7 @@ export default function EditClothingPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,7 +45,10 @@ export default function EditClothingPage() {
         const data = await fetchJson<DetailResponse>(
           `/api/clothing/${params.id}`
         );
-        if (!cancelled) setItem(data.item);
+        if (!cancelled) {
+          setItem(data.item);
+          setSelectedTagIds((data.item.tags ?? []).map((tag) => tag.id));
+        }
       } catch (error) {
         if (!cancelled) {
           setItem(null);
@@ -78,6 +83,7 @@ export default function EditClothingPage() {
       formData.append("season", values.season);
       formData.append("style", values.style);
       formData.append("notes", values.notes);
+      formData.append("tag_ids", JSON.stringify(selectedTagIds));
       if (file) {
         formData.append("image", file);
       }
@@ -149,6 +155,11 @@ export default function EditClothingPage() {
       <UploadZone
         currentImage={item.image_url}
         onImageSelected={setFile}
+      />
+
+      <TagPicker
+        selectedIds={selectedTagIds}
+        onChange={setSelectedTagIds}
       />
 
       <ClothingForm

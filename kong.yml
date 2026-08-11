@@ -4,12 +4,12 @@ _transform: true
 
 services:
   - name: auth
-    url: http://supabase-auth:9999
+    url: http://supabase-auth:9999/
     routes:
       - name: auth-v1
         paths:
           - /auth/v1
-        strip_path: false
+        strip_path: true
     plugins:
       - name: cors
         config:
@@ -21,12 +21,12 @@ services:
           max_age: 3600
 
   - name: rest
-    url: http://supabase-rest:3000
+    url: http://supabase-rest:3000/
     routes:
       - name: rest-v1
         paths:
           - /rest/v1
-        strip_path: false
+        strip_path: true
     plugins:
       - name: cors
         config:
@@ -37,12 +37,12 @@ services:
           credentials: true
 
   - name: storage
-    url: http://supabase-storage:5000
+    url: http://supabase-storage:5000/
     routes:
       - name: storage-v1
         paths:
           - /storage/v1
-        strip_path: false
+        strip_path: true
     plugins:
       - name: cors
         config:

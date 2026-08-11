@@ -208,8 +208,24 @@ docker compose up -d --force-recreate supabase-auth supabase-rest supabase-kong 
 
 ### 3.4 数据库迁移说明
 
-- `supabase/migrations/*.sql` 在 **Postgres 首次初始化数据卷** 时会自动执行。  
-- 若你很早就起过 `db`，数据卷已存在，**新加的 SQL（如 `002_*.sql`、`003_*.sql`）不会自动再跑**。
+- **Docker 首次 init** 只跑 [`supabase/docker-init/`](../supabase/docker-init/)（创建 `auth` schema + `search_path`）。  
+- **业务表**在 [`supabase/migrations/`](../supabase/migrations/)（`001`–`003`），必须等 **GoTrue（supabase-auth）至少成功启动一次**（已写入 `auth.users`）后再手工执行。  
+- 若数据卷已存在，新 SQL **不会**自动再跑。
+
+推荐顺序（新环境）：
+
+```bash
+docker compose up -d db minio minio-init
+# 等待 db healthy
+docker compose up -d supabase-auth
+# 确认：docker compose logs supabase-auth | grep "API started"
+docker compose up -d supabase-rest supabase-kong supabase-storage
+
+docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/000_auth_schema.sql
+docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/001_schema.sql
+docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/002_rls_clothing_tags_delete.sql
+docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/003_profiles_insert.sql
+```
 
 检查是否已有业务表：
 
@@ -217,30 +233,28 @@ docker compose up -d --force-recreate supabase-auth supabase-rest supabase-kong 
 docker compose exec db psql -U postgres -d wardrobe -c '\dt public.*'
 ```
 
-手工执行某条迁移（示例）：
-
-```bash
-docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/002_rls_clothing_tags_delete.sql
-docker compose exec -T db psql -U postgres -d wardrobe < supabase/migrations/003_profiles_insert.sql
-```
-
 想「彻底重来」（会清空数据库数据）：
 
 ```bash
 docker compose down -v
 docker compose up -d
+# 再按上面顺序等 Auth 就绪后执行 migrations
 ```
 
-### 3.5 关于 `auth.users`（常见首次失败）
+### 3.5 关于 `auth.users` 与 GoTrue
 
-业务表 `profiles` / `clothing_items` 外键引用 `auth.users`。  
-若 `db` 初始化时 Auth 架构尚未就绪，可能出现 `relation "auth.users" does not exist`。
+业务表外键引用 `auth.users`，故 **禁止**在 Auth 未就绪时执行 `001_schema.sql`。
 
-处理步骤：
+常见坑：
 
-1. 查看日志：`docker compose logs db | tail -100`  
-2. 确认 GoTrue 已至少成功启动一次：`docker compose logs supabase-auth | tail -50`  
-3. 若表没建起来：清空卷后按 3.2 顺序重启，或让开发协助补「先建 auth schema」的初始化 SQL  
+| 现象 | 处理 |
+|---|---|
+| `relation "auth.users" does not exist` | 先起 `supabase-auth`，再跑 `001` |
+| GoTrue：`API_EXTERNAL_URL` missing | 已在 compose 中配置；改后 `force-recreate supabase-auth` |
+| GoTrue：`relation "identities" does not exist` | 执行 `ALTER DATABASE wardrobe SET search_path TO public, auth;` 后重启 auth |
+| Kong：`oidc plugin is enabled but not installed` | `KONG_PLUGINS` 只用 `bundled` |
+| 宿主机 `5000` 被占用 | Storage 已映射为 `5001:5000` |
+| Kong 转发 404 | `kong.yml` 对 `/auth/v1` 使用 `strip_path: true` |
 
 ---
 
