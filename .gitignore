@@ -9,5 +9,21 @@ yarn-debug.log*
 yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
-.env*.local
 .vercel
+
+# 本地环境与密钥（保留 .env.example）
+.env
+.env.*
+!.env.example
+
+# Python 本地虚拟环境与缓存
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+.Python
