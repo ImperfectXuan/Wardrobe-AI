@@ -113,8 +113,9 @@ export function TagPicker({ selectedIds, onChange }: TagPickerProps) {
         </div>
       )}
 
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <Input
+          className="min-w-0"
           value={newName}
           onChange={(e) => setNewName(e.target.value)}
           placeholder="新标签名称"
@@ -129,6 +130,7 @@ export function TagPicker({ selectedIds, onChange }: TagPickerProps) {
         <Button
           type="button"
           variant="outline"
+          className="shrink-0"
           disabled={creating || !newName.trim()}
           onClick={() => void createTag()}
         >

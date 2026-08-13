@@ -2,25 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Shirt, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-
-const navItems = [
-  { href: "/", label: "仪表盘", icon: LayoutDashboard },
-  { href: "/wardrobe", label: "我的衣柜", icon: Shirt },
-  { href: "/settings", label: "设置", icon: Settings },
-] as const;
+import { APP_NAV_ITEMS, isNavItemActive } from "./nav-items";
 
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar pt-4 lg:flex">
+    <aside className="hidden w-56 shrink-0 flex-col border-r border-sidebar-border bg-sidebar pt-4 lg:sticky lg:top-14 lg:flex lg:h-[calc(100dvh-3.5rem)]">
       <nav className="flex flex-col gap-1 px-3">
-        {navItems.map(({ href, label, icon: Icon }) => {
-          const isActive =
-            href === "/" ? pathname === "/" : pathname.startsWith(href);
+        {APP_NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+          const isActive = isNavItemActive(pathname, href);
           return (
             <Link
               key={href}

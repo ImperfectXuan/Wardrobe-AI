@@ -42,6 +42,7 @@
     --radius: 1rem;
     --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "Space Mono", ui-monospace, monospace;
+    --bottom-nav-height: 3.5rem;
   }
 
   .theme {
@@ -88,11 +89,11 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply min-h-dvh overflow-x-hidden bg-background text-foreground antialiased;
     font-family: var(--font-sans);
   }
 
   html {
-    @apply font-sans;
+    @apply min-h-dvh overflow-x-hidden font-sans;
   }
 }

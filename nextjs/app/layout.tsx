@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
@@ -13,14 +13,20 @@ export const metadata: Metadata = {
   description: "你的个人服饰资产管理平台",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="zh-CN">
-      <body className="min-h-screen bg-background font-sans antialiased">
+    <html lang="zh-CN" className="min-h-dvh overflow-x-hidden">
+      <body className="min-h-dvh overflow-x-hidden bg-background font-sans antialiased">
         {children}
         <Toaster richColors position="top-center" />
       </body>

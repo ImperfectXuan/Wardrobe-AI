@@ -36,23 +36,8 @@ export function Navbar() {
           <span className="rounded-lg bg-primary px-2 py-0.5 text-sm text-primary-foreground">
             WA
           </span>
-          <span>Wardrobe AI</span>
+          <span className="hidden sm:inline">Wardrobe AI</span>
         </Link>
-
-        <nav className="hidden md:flex items-center gap-4">
-          <Link
-            href="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            仪表盘
-          </Link>
-          <Link
-            href="/wardrobe"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            我的衣柜
-          </Link>
-        </nav>
 
         <DropdownMenu>
           <DropdownMenuTrigger

@@ -167,7 +167,7 @@ export function ClothingForm({
         <Textarea id="notes" rows={3} {...register("notes")} />
       </div>
 
-      <Button type="submit" disabled={disabled}>
+      <Button type="submit" disabled={disabled} className="w-full sm:w-auto">
         {submitLabel}
       </Button>
     </form>

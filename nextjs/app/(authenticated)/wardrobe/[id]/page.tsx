@@ -132,9 +132,9 @@ export default function ClothingDetailPage() {
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Link href={`/wardrobe/${item.id}/edit`}>
-            <Button type="button" variant="outline">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+          <Link href={`/wardrobe/${item.id}/edit`} className="w-full sm:w-auto">
+            <Button type="button" variant="outline" className="w-full sm:w-auto">
               <Pencil className="mr-1 h-4 w-4" />
               编辑
             </Button>
@@ -142,6 +142,7 @@ export default function ClothingDetailPage() {
           <Button
             type="button"
             variant="destructive"
+            className="w-full sm:w-auto"
             onClick={() => setDeleteOpen(true)}
           >
             <Trash2 className="mr-1 h-4 w-4" />
@@ -163,7 +164,7 @@ export default function ClothingDetailPage() {
         </div>
 
         <div className="space-y-4 rounded-xl border p-4">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge>{item.category}</Badge>
             {item.tags?.map((tag) => (
               <Badge key={tag.id} variant="secondary">
