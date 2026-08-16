@@ -6,7 +6,7 @@
 相关文档：
 
 - 架构说明：`docs/technical-architecture.md`
-- 阶段测试：`docs/testing-guide.md`
+- 阶段测试（进度、测试条件、分步勾选）：`docs/testing-guide.md`
 - 环境变量模板：根目录 `.env.example`
 
 ---
